@@ -10,6 +10,7 @@
 </script>
 
 <main>
+  is connected: {$connected}
   {#if !$connected}
     <div class="uk-background-primary uk-light uk-text-center">
       {#if $scanningForFullnodes}

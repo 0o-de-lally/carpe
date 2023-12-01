@@ -17,13 +17,38 @@ pub async fn toggle_network(chain_id_str: &str) -> Result<NetworkPlaylist, Carpe
   let chain_id = NamedChain::from_str(chain_id_str)?;
   let mut app_cfg = get_cfg()?;
   app_cfg.set_chain_id(chain_id);
+
+  set_default_chain_playlist(&mut app_cfg, chain_id).await.ok();
+  app_cfg.workspace.default_chain_id = chain_id;
   app_cfg.save_file()?;
-  maybe_create_playlist(&mut app_cfg, chain_id).await.ok();
 
   get_networks().await
 }
 
-async fn maybe_create_playlist(
+// #[tauri::command(async)]
+// pub async fn command_set_playlist(
+//   url_str: String
+// ) -> Result<NetworkPlaylist, CarpeError> {
+//   let mut app_cfg = get_cfg()?;
+
+//   let u: Url = url_str.parse().map_err(|_| anyhow!("can't parse URL"))?;
+//   let pl = override_playlist(&mut app_cfg, u).await?;
+//   app_cfg.save_file()?;
+//   Ok(pl)
+// }
+
+// async fn override_playlist(
+//   app_cfg: &mut AppCfg,
+//   url: Url,
+// ) -> anyhow::Result<NetworkPlaylist> {
+
+//   app_cfg
+//       .update_network_playlist(Some(app_cfg.workspace.default_chain_id), Some(url))
+//       .await
+// }
+
+/// set a network playlist from defaults
+pub async fn set_default_chain_playlist(
   app_cfg: &mut AppCfg,
   chain_id: NamedChain,
 ) -> anyhow::Result<NetworkPlaylist> {
@@ -39,10 +64,9 @@ async fn maybe_create_playlist(
       .update_network_playlist(Some(chain_id), None)
       .await?
   };
-  app_cfg.workspace.default_chain_id = chain_id;
-  app_cfg.save_file()?;
   Ok(np)
 }
+
 
 #[tauri::command(async)]
 pub async fn get_networks() -> Result<NetworkPlaylist, CarpeError> {

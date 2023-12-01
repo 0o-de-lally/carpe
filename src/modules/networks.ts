@@ -56,7 +56,7 @@ export enum NamedChain {
 }
 
 export const network_profile = writable<NetworkPlaylist>(defaultPlaylist())
-export const connected = writable<boolean>(true)
+export const connected = writable<boolean>(false)
 export const scanningForFullnodes = writable<boolean>(false)
 export const scanning_fullnodes_backoff = writable<number>(new Date().getSeconds())
 export const scanning_fullnodes_retries = writable<number>(0)

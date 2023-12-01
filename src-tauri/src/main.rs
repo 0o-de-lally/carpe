@@ -21,8 +21,6 @@ pub(crate) mod migrate;
 
 #[tokio::main]
 async fn main() {
-  dbg!(&configs::default_config_path());
-
   match fs::create_dir_all(default_config_path()) {
     Ok(_) => (),
     Err(e) => {

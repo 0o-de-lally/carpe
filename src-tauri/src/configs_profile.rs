@@ -1,8 +1,10 @@
 //! account configurations
 
 use glob::glob;
+use libra_types::exports::NamedChain;
 use std::{fs, path::PathBuf};
 
+use crate::commands::networks::set_default_chain_playlist;
 use crate::configs::{self, get_cfg};
 use crate::default_config_path;
 use libra_types::legacy_types::app_cfg::get_nickname;
@@ -13,7 +15,7 @@ use libra_types::{
 };
 
 /// For switching between profiles in the Account DB.
-pub async fn set_account_profile(
+pub async fn init_account_profile(
   account: AccountAddress,
   authkey: AuthenticationKey,
 ) -> anyhow::Result<AppCfg> {
@@ -36,10 +38,17 @@ pub async fn set_account_profile(
     fs::create_dir_all(cfg.get_block_dir(None)?)?;
   }
 
+  // if we are initializing or otherwise have an empty network profile
+ dbg!(&cfg.network_playlist);
+ if cfg.network_playlist.is_empty() {
+  set_default_chain_playlist(&mut cfg, NamedChain::MAINNET).await?;
+ }
+
   cfg.save_file()?;
 
   Ok(cfg)
 }
+
 
 /// helper to get local proofs
 pub fn get_local_proofs_this_profile() -> anyhow::Result<Vec<PathBuf>> {
@@ -56,5 +65,5 @@ pub fn get_local_proofs_this_profile() -> anyhow::Result<Vec<PathBuf>> {
 
 async fn test_create() {
   let a = AuthenticationKey::random();
-  set_account_profile(a.derived_address(), a).await.unwrap();
+  init_account_profile(a.derived_address(), a).await.unwrap();
 }

@@ -94,7 +94,7 @@ pub async fn init_from_private_key(pri_key_string: String) -> Result<CarpeProfil
   key_manager::set_private_key(&address.to_string(), acc_struct.pri_key)
     .map_err(|e| CarpeError::config(&e.to_string()))?;
 
-  configs_profile::set_account_profile(address, authkey).await?;
+  configs_profile::init_account_profile(address, authkey).await?;
   let core_profile = &Profile::new(authkey, address);
   Ok(core_profile.into())
 }
@@ -167,7 +167,7 @@ pub async fn get_originating_address(
 #[tauri::command(async)]
 // IMPORTANT: don't return the profile, since it has keys
 pub async fn switch_profile(account: AccountAddress) -> Result<CarpeProfile, CarpeError> {
-  let mut app_cfg = get_cfg()?;
+  let mut app_cfg: libra_types::legacy_types::app_cfg::AppCfg = get_cfg()?;
   let p = app_cfg.get_profile(Some(account.to_string()))?;
   app_cfg.workspace.set_default(p.nickname.clone());
   app_cfg.save_file()?;

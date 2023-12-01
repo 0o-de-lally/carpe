@@ -107,6 +107,7 @@
 <main class="uk-background-muted uk-height-viewport">
   <Style />
 
+  is init: {$isInit}
   {#if $isInit}
     <SearchingFullnodes />
     <KeyError/>
