@@ -18,7 +18,9 @@ pub async fn toggle_network(chain_id_str: &str) -> Result<NetworkPlaylist, Carpe
   let mut app_cfg = get_cfg()?;
   app_cfg.set_chain_id(chain_id);
 
-  set_default_chain_playlist(&mut app_cfg, chain_id).await.ok();
+  set_default_chain_playlist(&mut app_cfg, chain_id)
+    .await
+    .ok();
   app_cfg.workspace.default_chain_id = chain_id;
   app_cfg.save_file()?;
 
@@ -66,7 +68,6 @@ pub async fn set_default_chain_playlist(
   };
   Ok(np)
 }
-
 
 #[tauri::command(async)]
 pub async fn get_networks() -> Result<NetworkPlaylist, CarpeError> {

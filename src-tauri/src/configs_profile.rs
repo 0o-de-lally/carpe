@@ -39,16 +39,15 @@ pub async fn init_account_profile(
   }
 
   // if we are initializing or otherwise have an empty network profile
- dbg!(&cfg.network_playlist);
- if cfg.network_playlist.is_empty() {
-  set_default_chain_playlist(&mut cfg, NamedChain::MAINNET).await?;
- }
+  dbg!(&cfg.network_playlist);
+  if cfg.network_playlist.is_empty() {
+    set_default_chain_playlist(&mut cfg, NamedChain::MAINNET).await?;
+  }
 
   cfg.save_file()?;
 
   Ok(cfg)
 }
-
 
 /// helper to get local proofs
 pub fn get_local_proofs_this_profile() -> anyhow::Result<Vec<PathBuf>> {
