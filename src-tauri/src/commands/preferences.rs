@@ -51,7 +51,6 @@ pub async fn refresh_upstream_peer_stats() -> Result<Vec<Url>, CarpeError> {
       vec![first_url]
     }
   };
-  dbg!(&peers);
   Ok(peers) // uses app_cfg.chain_info_chain_id
 }
 

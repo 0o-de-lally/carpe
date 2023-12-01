@@ -91,6 +91,7 @@ export const addAccount = async (init_type: InitType, secret: string) => {
       setTimeout(() => navigate('wallet'), 10)
       return res
     })
+    .then(carpeTick)
     .catch((error) => {
       raise_error(error, false, 'addAccount')
     })
