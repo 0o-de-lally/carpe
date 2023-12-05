@@ -18,6 +18,7 @@ pub(crate) mod configs;
 pub(crate) mod configs_profile;
 pub(crate) mod key_manager;
 pub(crate) mod migrate;
+mod miner_future;
 
 #[tokio::main]
 async fn main() {

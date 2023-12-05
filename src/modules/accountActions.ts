@@ -15,6 +15,7 @@ import {
   migrateInProgress,
   migrateSuccess,
   canMigrate,
+  isKeyError,
 } from './accounts'
 import type { CarpeProfile, SlowWalletBalance } from './accounts'
 import { navigate } from 'svelte-navigator'
@@ -133,6 +134,7 @@ export const setAccount = async (account: string, notifySucess = true) => {
   invoke('switch_profile', { account })
     .then((res: CarpeProfile) => {
       signingAccount.set(res)
+      isKeyError.set(false)
       isInit.set(true)
       if (notifySucess) {
         notify_success('Account switched to ' + res.nickname)
