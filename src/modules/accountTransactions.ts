@@ -8,11 +8,11 @@ export enum WalletType {
   Community = 1,
 }
 
-export const setWalletType = async (wtype: WalletType) => {
+export const setWalletType = async (wtype: WalletType, address: String) => {
   // TODO: implement community if necessary
   if (wtype != WalletType.Slow) return
 
-  invoke('set_slow_wallet')
+  invoke('set_slow_wallet', { address })
     .then((res: string) => {
       notify_success(`The account is set to: SlowWallet`)
       responses.set(res)

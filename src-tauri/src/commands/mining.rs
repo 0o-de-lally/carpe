@@ -75,7 +75,7 @@ pub async fn start_backlog_sender_listener<R: Runtime>(
   info!("\nSTARTING BACKLOG LISTENER");
 
   let mut app_cfg = get_cfg()?;
-  inject_private_key_to_cfg(&mut app_cfg)?;
+  inject_private_key_to_cfg(&mut app_cfg, None)?;
   let cfg_mutex = Arc::new(Mutex::new(app_cfg));
 
   // prepare listener to receive events
@@ -115,7 +115,7 @@ pub async fn start_backlog_sender_listener<R: Runtime>(
 #[tauri::command(async)]
 pub async fn submit_backlog<R: Runtime>(_window: Window<R>) -> Result<BacklogSuccess, CarpeError> {
   let mut config = get_cfg()?;
-  inject_private_key_to_cfg(&mut config)?;
+  inject_private_key_to_cfg(&mut config, None)?;
   maybe_send_backlog(&mut config).await
 }
 

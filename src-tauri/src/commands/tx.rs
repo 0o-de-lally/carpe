@@ -14,7 +14,7 @@ fn make_account_key(address: &AccountAddress) -> anyhow::Result<AccountKey> {
 
 #[tauri::command(async)]
 pub async fn coin_transfer(
-  _sender: AccountAddress,
+  sender: AccountAddress,
   receiver: &str,
   amount: u64,
 ) -> Result<(), CarpeError> {
@@ -29,7 +29,7 @@ pub async fn coin_transfer(
   };
 
   let mut config = get_cfg()?;
-  inject_private_key_to_cfg(&mut config)?;
+  inject_private_key_to_cfg(&mut config, Some(sender))?;
   let mut sender = Sender::from_app_cfg(&config, None).await?;
   sender
     .transfer(receiver_account, amount as f64, false)
