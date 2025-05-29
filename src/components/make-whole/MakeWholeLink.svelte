@@ -1,32 +1,33 @@
 <script>
   import { onDestroy, onMount } from 'svelte'
-  import { Link } from 'svelte-navigator'
-
-  import { _ } from 'svelte-i18n'
+  import { link } from 'svelte-spa-router'
+  
   import { makeWhole } from '../../modules/accounts'
-  import { routes } from '../../modules/routes'
+  import { updateMakeWhole } from '../../modules/accountActions'
 
-  let unsubs
-  let hasMakeWhole = false
-  let hasCoinsToClaim = false
-  onMount(async () => {
-    unsubs = makeWhole.subscribe((mk) => {
-      hasMakeWhole = mk && Object.values(mk).find((credits) => credits.length > 0)
-      hasCoinsToClaim =
-        mk && Object.values(mk).find((credits) => credits.find((credit) => !credit.claimed))
+  let totalCredits = 0
+  let isDisplayed = false
+
+  onMount(() => {
+    updateMakeWhole()
+    makeWhole.subscribe((m) => {
+      totalCredits = 0
+      Object.keys(m).forEach((account) => {
+        m[account]
+          .filter((item) => !item.claimed)
+          .forEach((item) => {
+            totalCredits += item.coins / 1000000
+          })
+      })
+      isDisplayed = totalCredits > 0
     })
   })
 
   onDestroy(async () => {
-    unsubs && unsubs()
+    // No need to unsubscribe from makeWhole as it's handled by the onMount lifecycle
   })
 </script>
 
-{#if hasMakeWhole}
-  <Link to={routes.makeWhole}>
-    <button class="uk-button {hasCoinsToClaim ? 'uk-button-primary' : 'uk-button-default'}">
-      <span uk-icon="icon: warning; ratio: 0.8" style="margin-right: 5px;" />
-      {$_('make_whole.link_title')}
-    </button>
-  </Link>
+{#if isDisplayed}
+  <a href="/make-whole" use:link>{totalCredits} coins</a>
 {/if}

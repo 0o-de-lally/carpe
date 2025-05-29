@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Link, useLocation } from 'svelte-navigator'
+  import { link, location } from 'svelte-spa-router'
   import { _ } from '../lang/i18n'
   import { routes } from '../modules/routes'
 
@@ -20,27 +20,25 @@
     routes.accountDetails
   ]
 
-  const location_store = useLocation()
-
   $: watchOnly = $signingAccount?.watch_only
 </script>
 
 <main class="uk-margin-top">
   <nav class="uk-navbar-container" uk-navbar>
-    {#if secondaryRoutes.includes($location_store.pathname)}
-      <Link to={routes.wallet}
-        ><span class="uk-text-muted" uk-icon="icon: arrow-left; ratio: 2" /></Link
+    {#if secondaryRoutes.includes($location)}
+      <a href={routes.wallet} use:link
+        ><span class="uk-text-muted" uk-icon="icon: arrow-left; ratio: 2" /></a
       >
     {/if}
 
     {#if $signingAccount}
       <div class="uk-navbar-center">
         <ul class="uk-navbar-nav uk-flex">
-          <li class="uk-padding {$location_store.pathname.includes('wallet') ? 'uk-active' : ''}">
-            <Link to={routes.wallet}>{$_('nav.wallet')}</Link>
+          <li class="uk-padding {$location.includes('wallet') ? 'uk-active' : ''}">
+            <a href={routes.wallet} use:link>{$_('nav.wallet')}</a>
           </li>
-          <li class="uk-padding {$location_store.pathname.includes('transfer') ? 'uk-active' : ''}">
-            <Link to={watchOnly ? routes.wallet : routes.transfer}>{$_('nav.transactions')}</Link>
+          <li class="uk-padding {$location.includes('transfer') ? 'uk-active' : ''}">
+            <a href={watchOnly ? routes.wallet : routes.transfer} use:link>{$_('nav.transactions')}</a>
           </li>
         </ul>
       </div>

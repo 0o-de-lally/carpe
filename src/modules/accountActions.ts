@@ -21,7 +21,7 @@ import {
   totalBalance,
 } from './accounts'
 import type { CarpeProfile, SlowWalletBalance } from './accounts'
-import { navigate } from 'svelte-navigator'
+import { push } from 'svelte-spa-router'
 import { carpeTick } from './tick'
 import { initNetwork } from './networks'
 
@@ -494,7 +494,7 @@ export function addWatchAccount(address: string, isLegacy: boolean = true) {
       notify_error('Unable to parse AccountAddress')
       raise_error(e, true, 'add_watch_account')
     })
-    .finally(() => navigate('/wallet'))
+    .finally(() => push('/wallet'))
 }
 
 async function onAccountAdd(res: CarpeProfile) {

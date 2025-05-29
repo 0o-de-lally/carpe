@@ -1,6 +1,6 @@
 <script>
   import { removeAccount } from '../../modules/accountActions';
-  import { navigate } from 'svelte-navigator'
+  import { push } from 'svelte-spa-router'
   import UIkit from 'uikit'
   import { onMount } from 'svelte'
   import { writable } from 'svelte/store'
@@ -17,7 +17,7 @@
   function handleRemoveAccount() {
     if ($signingAccount.watch_only) {
       removeAccount($signingAccount.account) 
-      navigate('/wallet')
+      push('/wallet')
     } else {
       modal && modal.show()      
     }
@@ -32,7 +32,7 @@
     finally {
       isRemoving.set(false)
       modal && modal.hide()
-      navigate('/wallet')
+      push('/wallet')
     }
   }
 </script>

@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte'
   import { _ } from 'svelte-i18n'
-  import { Link } from 'svelte-navigator'
+  import { link } from 'svelte-spa-router'
 
   import { app_version } from '../../modules/version'
 
@@ -11,4 +11,4 @@
   })
 </script>
 
-<Link to="about" class="uk-text-muted">{$_('about.about')} - v{appVersion.version}</Link>
+<a href="/about" use:link class="uk-text-muted">{$_('about.about')} - v{appVersion.version}</a>

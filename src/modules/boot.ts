@@ -1,4 +1,4 @@
-import { navigate } from 'svelte-navigator'
+import { push } from 'svelte-spa-router'
 import {
   getDefaultProfile,
   isCarpeInit,
@@ -39,13 +39,13 @@ export const bootUp = async () => {
         setInterval(carpeTick, 30000) // start the carpe tick for every 30 secs, this is async
         isCarpeTickRunning.set(true)
         isBooted.set(true)
-        navigate('wallet')
+        push('wallet')
       })
   } else {
     logger(Level.Warn, 'carpe settings not initialized')
     await isLegacy().finally(() => {
       isBooted.set(true)
-      navigate('wallet')
+      push('wallet')
     })
   }
 }

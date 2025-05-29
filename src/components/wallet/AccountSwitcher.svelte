@@ -1,6 +1,6 @@
 <script lang="ts">
   import { _ } from 'svelte-i18n'
-  import { Link, navigate } from 'svelte-navigator'
+  import { link, push } from 'svelte-spa-router'
 
   import { signingAccount, allAccounts } from '../../modules/accounts'
   import { setAccount } from '../../modules/accountActions'
@@ -43,7 +43,7 @@
                     on:click={() => {
                       if ($signingAccount.account != acc.account) {
                         if (acc.watch_only) {
-                          navigate('wallet')
+                          push('/wallet')
                         }
                         setAccount(acc.account)
                       }
@@ -58,18 +58,14 @@
           {/if}
         {/if}
         <li>
-          <a href={'#'}>
-            <Link to="settings" class="uk-text-muted">
-              {$_('wallet.account_switcher.setting')}</Link
-            ></a
-          >
+          <a href="/settings" use:link class="uk-text-muted">
+            {$_('wallet.account_switcher.setting')}
+          </a>
         </li>
         <li>
-          <a href={'#'}>
-            <Link to="dev" class="uk-text-muted">
-              {$_('wallet.account_switcher.developers')}</Link
-            ></a
-          >
+          <a href="/dev" use:link class="uk-text-muted">
+            {$_('wallet.account_switcher.developers')}
+          </a>
         </li>
         <li class="uk-text-muted">
           <AboutLink />

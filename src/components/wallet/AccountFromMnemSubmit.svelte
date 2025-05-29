@@ -3,7 +3,7 @@
   import UIkit from 'uikit'
   import { InitType, addAccount } from '../../modules/accountActions'
   import { onDestroy, onMount } from 'svelte'
-  import { navigate } from 'svelte-navigator'
+  import { push } from 'svelte-spa-router'
 
   export let formDangerMnem: string
   export let isNewAccount = true
@@ -32,7 +32,7 @@
       isSubmitting = false
       mnem_string = null
       confirmationModal && confirmationModal.hide()
-      navigate('wallet')
+      push('wallet')
     })
   }
 </script>

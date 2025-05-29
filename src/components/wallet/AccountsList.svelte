@@ -9,7 +9,7 @@
   import Copy from '../../components/layout/Copy.svelte'
   import { preferences, setAccountsListPreference } from '../../modules/user_preferences'
   import AccountRowSkeleton from './AccountRowSkeleton.svelte'
-  import { navigate } from 'svelte-navigator'; // Adjust based on your routing library
+  import { push } from 'svelte-spa-router'; // Adjust based on your routing library
   UIkit.use(Icons)
 
   let showNoteColumn = false
@@ -170,7 +170,7 @@
                 <span>
                   {#if a.account == $signingAccount.account}
                     <span uk-icon="user" />
-                    <button uk-icon="settings" class="uk-margin-left" on:click={() => navigate('/account-details')} />
+                    <button uk-icon="settings" class="uk-margin-left" on:click={() => push('/account-details')} />
                   {/if}
                   {#if a.watch_only}
                     <span class="uk-align-right" style="margin: 4px;" uk-icon="eye"></span>

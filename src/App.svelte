@@ -5,7 +5,7 @@
   // import { listen } from '@tauri-apps/api/event'
   // import type { Event } from '@tauri-apps/api/event'
   import { onDestroy, onMount } from 'svelte'
-  import { Router, Route } from 'svelte-navigator'
+  import router from 'svelte-spa-router'
 
   // CARPE MODULES
   // import {
@@ -52,6 +52,23 @@
   // black magic with I18n here
   // temporarily set up here otherwise... issues
   init_locale_preferences()
+
+  // Configure routes for svelte-spa-router
+  const routesConfig = {
+    [routes.wallet]: Wallet,
+    [routes.accountDetails]: AccountDetails,
+    [routes.accountFromMnem]: AccountCreate,
+    [routes.addWatchAccount]: AddWatchAccount,
+    [routes.keygen]: Keygen,
+    [routes.transfer]: Transactions,
+    [routes.events]: Events,
+    [routes.settings]: Settings,
+    [routes.about]: About,
+    [routes.makeWhole]: MakeWhole,
+    [routes.developer]: DevMode,
+    // Default route
+    '/': Wallet
+  }
 
   // let unlistenProofStart
   // let unlistenAck
@@ -132,31 +149,15 @@
   {/if}
 
   <div class="uk-container">
-    <Router>
-      <Nav />
-      <div class="uk-background-muted uk-margin-large">
-        <Route path={routes.wallet} component={Wallet} primary={false} />
-        <Route path={routes.accountDetails} component={AccountDetails} primary={false} />
-        <!-- <Route path="/add-account" component={AddAccount} primary={false} /> -->
-        <Route path={routes.accountFromMnem} component={AccountCreate} primary={false} />
-        <Route path={routes.addWatchAccount} component={AddWatchAccount} primary={false} />
-        <Route path={routes.keygen} component={Keygen} primary={false} />
-        <!-- <Route path={routes.miner} component={Miner} primary={false} /> -->
-        <Route path={routes.transfer} component={Transactions} primary={false} />
-        <Route path={routes.events} component={Events} primary={false} />
-        <Route path={routes.settings} component={Settings} primary={false} />
-        <Route path={routes.about} component={About} primary={false} />
-        <Route path={routes.makeWhole} component={MakeWhole} primary={false} />
+    <Nav />
+    <div class="uk-background-muted uk-margin-large">
+      <svelte:component this={router} routes={routesConfig} />
+    </div>
 
-        <!-- DEV -->
-        <Route path={routes.developer} component={DevMode} primary={false} />
-      </div>
-
-      <!-- Show Debug Card Below -->
-      {#if $debugMode}
-        <DebugCard />
-      {/if}
-    </Router>
+    <!-- Show Debug Card Below -->
+    {#if $debugMode}
+      <DebugCard />
+    {/if}
   </div>
 </main>
 {/if}
