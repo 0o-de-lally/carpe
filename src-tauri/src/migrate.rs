@@ -1,8 +1,8 @@
-use crate::configs;
+use crate::configs::{self, default_config_path, is_initialized};
 use anyhow::bail;
 use libra_types::core_types::network_playlist;
 use libra_types::core_types::{
-  app_cfg::{get_nickname, Profile},
+  app_cfg::{get_nickname, AppCfg, Profile},
   network_playlist::NetworkPlaylist,
 };
 use libra_types::exports::{
@@ -59,6 +59,24 @@ pub fn read_accounts(legcy_dir: &Path) -> anyhow::Result<Accounts> {
 }
 
 pub async fn maybe_migrate_data() -> anyhow::Result<()> {
+  migrate_legacy_v1().await?;
+  migrate_legacy_v1_1().await?;
+  Ok(())
+}
+
+pub async fn migrate_legacy_v1_1() -> anyhow::Result<()> {
+  if !is_initialized() {
+    let dir = default_config_path();
+    let old_path = dir.join("libra.yaml");
+
+    let mut app_cfg = AppCfg::load(Some(old_path))?;
+    app_cfg.workspace.node_home = default_config_path().to_path_buf();
+    app_cfg.save_file()?;
+  }
+  Ok(())
+}
+
+pub async fn migrate_legacy_v1() -> anyhow::Result<()> {
   let legacy_dir = configs::legacy_config_path();
   info!("legacy data path: {}", &legacy_dir.display());
   if !legacy_dir.exists() {
